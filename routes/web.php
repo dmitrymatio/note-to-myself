@@ -21,3 +21,5 @@ Route::post('/login', [LoginController::class, 'store']);
 
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
 Route::post('/register', [RegisterController::class, 'store']);
+
+Route::view('forgot_password', 'auth.reset_password')->name('password.reset');

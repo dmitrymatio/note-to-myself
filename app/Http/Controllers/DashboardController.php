@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Mail\PostLiked;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Note;
 use App\Models\Todo;
@@ -48,16 +50,21 @@ class DashboardController extends Controller
             $request->user()->websites()->create($request->only('website'));
         }
 
-        if ($request->filled('images')) {
-            $request->validate(['images'=>'mimes:jpeg,jpg,png,gif|required']);
-
-            $file = $request->only(images);
-            $file->move('uploads', $file->getClientOriginalName());
-
-
-            $request->user()->images()->create('uploads/'.$file->getClientOriginalName());
+        if ($request->hasFile('image')) {
+            if ($request->file('image')->isValid()) {
+                $validated = $request->validate([
+                    'image' => 'mimes:jpeg,png'
+                ]);
+                $name = $request->file('image')->getClientOriginalName();
+                $request->image->storeAs('/public', $name);
+                $url = Storage::url($name);
+                $request->user()->images()->create([
+                    'name' => $name,
+                     'image_url' => $url,
+                 ]);
+                return \Redirect::back();
+            }
         }
-
-        return back();
+        return back()->with('status', "Could not upload image :(')");
     }
 }

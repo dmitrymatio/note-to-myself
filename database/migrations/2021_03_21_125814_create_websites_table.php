@@ -16,7 +16,7 @@ class CreateWebsitesTable extends Migration
         Schema::create('websites', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('website');
+            $table->string('website', 80);
             $table->timestamps();
         });
     }

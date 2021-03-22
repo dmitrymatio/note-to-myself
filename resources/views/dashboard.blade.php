@@ -20,7 +20,7 @@
                     <div class="flex flex-col justify-between space-x-5 mb-5">
                         <input
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 @error('images') border-red-500 @enderror"
-                            id="grid-images" type="file" name="images">
+                            id="grid-images" type="file" name="image">
 
                         @error('images')
                             <div class="text-red-500 mt-2 text-sm">
@@ -28,13 +28,18 @@
                             </div>
                         @enderror
                     </div>
-                    <ul class="flex justify-between space-x-2">
+                    <div class="flex justify-between space-x-2">
                         @foreach ($images as $image)
-                            <li>
-                                <img src="{{ $image->image }}" alt="">
-                            </li>
+                            <div class="w-1/4 rounded overflow-hidden shadow-lg">
+                                <a target="_blank" href="{{ $image->image_url }}">
+                                    <img class="w-full" src="{{ $image->image_url }}">
+                                </a>
+                                <div class="px-6 py-4">
+                                    <div class="font-bold text-l mb-2">{{ $image->name }}</div>
+                                </div>
+                            </div>
                         @endforeach
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,7 +56,8 @@
                     @enderror
                     <textarea
                         class="appearance-none h-4/5 block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 @error('notes') border-red-500 @enderror"
-                        id="grid-notes" type="text" name="notes">{{ $notes->notes }}</textarea>
+                        id="grid-notes" type="text"
+                        name="notes">@if (!is_null($notes)) {{ $notes->notes }}@endif</textarea>
                 </div>
             </div>
         </div>
@@ -67,7 +73,8 @@
                 @enderror
                 <textarea
                     class="appearance-none h-4/5 block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 @error('todos') border-red-500 @enderror"
-                    id="grid-to-do" type="text" name='todos'>{{ $todos->todos }}</textarea>
+                    id="grid-to-do" type="text"
+                    name='todos'>@if (!is_null($todos)){{ $todos->todos }}@endif</textarea>
             </div>
             <div class="w-full md:w-1/2">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-websites">
